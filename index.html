@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en" data-boot="pending">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <base id="app-base" href="./">
+  <script id="route-base">
+    const entryPath = location.pathname.replace(/\/(?:MultiscaleNetworks|ComorbidityModules|KeyDiseaseConnections|overview|communities|roles|comparison|flow)(?:\/(?:index\.html)?)?$/, "/");
+    document.getElementById("app-base").href = new URL(".", new URL(entryPath, location.href)).href;
+  </script>
+  <meta name="description" data-i18n-attrs="content" content="眼病患者的多尺度共病模式：基于电子病历的网络分析交互可视化">
+  <title data-i18n data-i18n-source="眼病患者的多尺度共病模式">Multiscale Comorbidity Patterns in Patients with Eye Diseases</title>
+  <style id="boot-styles">html,body{color:#000;background:#eee;height:100%;margin:0;font-family:Segoe UI,Microsoft YaHei UI,sans-serif;overflow:hidden}html:not([data-boot=ready]) .masthead,html:not([data-boot=ready]) #app,html:not([data-boot=ready]) #tooltip{visibility:hidden}#boot-status{text-align:center;color:#183247;place-content:center;gap:12px;font-size:13px;display:grid;position:fixed;inset:0}#boot-status p{margin:0}#boot-status .boot-error,#boot-status button,html[data-boot=ready] #boot-status,html[data-boot=error] #boot-status .boot-loading{display:none}html[data-boot=error] #boot-status .boot-error,html[data-boot=error] #boot-status button{display:block}#boot-status button{font:inherit;cursor:pointer;background:#fff;border:1px solid #d8e3e7;border-radius:8px;justify-self:center;padding:7px 16px}.global-search>svg{width:15px;height:15px}</style>
+  <script type="module" crossorigin src="./assets/index-C_CjhMuP.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-CmBCCBgX.css">
+</head>
+<body>
+  <div id="boot-status" role="status" aria-live="polite">
+    <p class="boot-loading" data-i18n data-i18n-source="正在加载共病网络…">Loading comorbidity networks…</p>
+    <p class="boot-error" data-i18n data-i18n-source="页面资源加载失败，请刷新重试。">Unable to load page resources. Please reload to try again.</p>
+    <button type="button" data-i18n data-i18n-source="重新加载" onclick="location.reload()">Reload</button>
+  </div>
+  <script id="boot-language">
+    try {
+      if (localStorage.getItem("comorbidity-atlas-language") === "zh") {
+        document.documentElement.lang = "zh-CN";
+        document.querySelectorAll("[data-i18n-source]").forEach(element => {
+          element.textContent = element.dataset.i18nSource;
+        });
+      }
+    } catch { /* Loading remains available when storage is disabled. */ }
+  </script>
+  <header class="masthead">
+    <div class="mast-inner">
+      <a href="./MultiscaleNetworks" class="brand" data-i18n-attrs="aria-label" aria-label="眼病患者的多尺度共病模式：基于电子病历的网络分析首页">
+        <strong data-i18n>眼病患者的多尺度共病模式：<span class="brand-subtitle">基于电子病历的网络分析</span></strong>
+      </a>
+      <button class="button rail-toggle" id="nav-toggle" type="button" data-i18n aria-controls="primary-nav" aria-expanded="true">导航</button>
+      <nav class="nav" id="primary-nav" data-i18n data-i18n-attrs="aria-label" aria-label="实验结果视图">
+        <a href="./MultiscaleNetworks" data-tab="overview"><span>多尺度共病网络</span></a>
+        <a href="./ComorbidityModules" data-tab="communities"><span>中尺度共病模块</span></a>
+        <a href="./KeyDiseaseConnections" data-tab="roles"><span>关键疾病连接</span></a>
+        <div class="rail-information" data-i18n-attrs="aria-label" aria-label="帮助与系统信息">
+          <button type="button" data-information="guide" aria-haspopup="dialog" aria-controls="information-dialog" aria-expanded="false"><span>使用指南</span></button>
+          <button type="button" data-information="about" aria-haspopup="dialog" aria-controls="information-dialog" aria-expanded="false"><span>关于</span></button>
+        </div>
+      </nav>
+      <div class="rail-context"><span class="rail-caption" data-i18n>当前视图</span><h1 id="chart-title"></h1></div>
+    </div>
+  </header>
+  <main id="app" aria-labelledby="chart-title">
+    <div id="chart"></div>
+    <div class="network-empty" id="network-empty" data-i18n role="status" hidden><strong>暂无可显示的关联</strong><span>调整筛选条件或恢复全图继续查看</span><button type="button" class="button" data-action="restore-network">恢复全图</button></div>
+    <div class="chart-header">
+      <button class="button rail-toggle" id="tools-toggle" type="button" data-i18n aria-controls="view-options" aria-expanded="true">搜索与操作</button>
+      <div class="view-options" id="view-options">
+        <div class="global-search">
+        <label for="disease-search" data-i18n class="sr-only">搜索 ICD-3 或疾病名</label>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="5.5" stroke="currentColor" stroke-width="1.7"/><path d="m14 14 5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <input id="disease-search" data-i18n-attrs="placeholder" placeholder="搜索 ICD-3 或疾病名" autocomplete="off" aria-controls="search-results" aria-expanded="false">
+        <div id="search-results" class="search-results" hidden></div>
+        </div>
+        <div id="view-controls" class="view-controls" data-i18n-attrs="aria-label" aria-label="当前视图选项"></div>
+        <button class="button rail-action" id="inspector-toggle" type="button" data-action="toggle-inspector" aria-controls="inspector" aria-expanded="false"></button>
+      </div>
+    </div>
+    <div id="guide" class="guide">
+      <button type="button" id="legend-toggle" class="button" data-i18n data-action="toggle-guide" aria-controls="legend-panel" aria-expanded="false">图例</button>
+      <button class="button language-switch" id="language-toggle" type="button" aria-label="Switch to Chinese" aria-pressed="true"><span data-language-label lang="zh-CN">中文</span></button>
+      <aside id="legend-panel" class="guide-card" aria-labelledby="guide-title" hidden>
+        <div class="guide-head"><h2 id="guide-title" data-i18n>图例</h2><button type="button" class="legend-close" data-action="close-guide" data-i18n-attrs="aria-label" aria-label="关闭图例">×</button></div>
+        <div id="chart-footer" class="chart-footer" data-i18n-attrs="aria-label" tabindex="0" aria-label="当前视图图例"></div>
+      </aside>
+    </div>
+    <div class="chart-dock">
+      <div class="canvas-tools" id="chart-tools" data-i18n-attrs="aria-label" aria-label="网络工具"></div>
+    </div>
+    <aside class="panel inspector" id="inspector" aria-labelledby="inspector-title" hidden></aside>
+  </main>
+  <dialog id="information-dialog" class="information-dialog" aria-labelledby="information-title"></dialog>
+  <div class="tooltip" id="tooltip" role="status" hidden></div>
+  <span id="fullscreen-status" class="sr-only" role="status" aria-live="polite"></span>
+  <span id="scale-playback-status" class="sr-only" role="status" aria-live="polite"></span>
+  <span id="language-status" class="sr-only" role="status" aria-live="polite"></span>
+  <noscript>Enable JavaScript to explore the interactive networks.</noscript>
+</body>
+</html>
